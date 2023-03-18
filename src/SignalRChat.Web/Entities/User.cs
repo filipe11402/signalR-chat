@@ -10,9 +10,12 @@ public sealed class User
 
     public string Salt { get; set; }
 
-    private User() { }
+    private User()
+    {
+    }
 
-    public User(Guid id,
+    public User(
+        Guid id,
         string username,
         string password, 
         string salt)

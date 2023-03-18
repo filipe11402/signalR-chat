@@ -12,19 +12,19 @@ public sealed class Message
 
     public DateTime SentAt { get; set; }
 
-    public DateTime ReadAt { get; set; }
+    public DateTime? ReadAt { get; set; }
 
-    public Message()
+    private Message()
     {
     }
 
     public Message(
-        Guid id, 
-        Guid senderId,
-        Guid receiverId,
-        string content,
+        Guid id,
+        Guid senderId, 
+        Guid receiverId, 
+        string content, 
         DateTime sentAt,
-        DateTime readAt)
+        DateTime? readAt)
     {
         Id = id;
         SenderId = senderId;
