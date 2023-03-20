@@ -1,4 +1,4 @@
-﻿namespace SignalRChat.Web.Entities;
+﻿namespace SignalRChat.Web.Domain;
 
 public sealed class User
 {
@@ -17,7 +17,7 @@ public sealed class User
     public User(
         Guid id,
         string username,
-        string password, 
+        string password,
         string salt)
     {
         Id = id;

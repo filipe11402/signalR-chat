@@ -1,4 +1,4 @@
-﻿namespace SignalRChat.Web.Entities;
+﻿namespace SignalRChat.Web.Domain;
 
 public sealed class Message
 {
@@ -20,9 +20,9 @@ public sealed class Message
 
     public Message(
         Guid id,
-        Guid senderId, 
-        Guid receiverId, 
-        string content, 
+        Guid senderId,
+        Guid receiverId,
+        string content,
         DateTime sentAt,
         DateTime? readAt)
     {
