@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using SignalRChat.Web.Helpers;
 using SignalRChat.Web.Models;
 using System.Diagnostics;
 
@@ -8,11 +11,13 @@ public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
 
+    //TODO: use filter if not valid, go to Login page otherwise let it pass
     public HomeController(ILogger<HomeController> logger)
     {
         _logger = logger;
     }
 
+    [JwtAuthorizationFilter]
     public IActionResult Index()
     {
         return View();

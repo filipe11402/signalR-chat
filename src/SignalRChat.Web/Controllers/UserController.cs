@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SignalRChat.Web.Domain;
 using SignalRChat.Web.Helpers;
 using SignalRChat.Web.Requests;
@@ -7,7 +8,6 @@ namespace SignalRChat.Web.Controllers;
 
 public class UserController : Controller
 {
-    //TODO: page to register user
     private readonly IUserRepository _userRepository;
 
     public UserController(
@@ -21,6 +21,8 @@ public class UserController : Controller
         return View();
     }
 
+    [Authorize]
+    [HttpGet]
     public IActionResult Get(string Id)
     {
         return View();
@@ -78,7 +80,7 @@ public static class UserControllerExtensions
     internal static void MapUserControllerRoutes(this IEndpointRouteBuilder builder)
     {
         builder.MapControllerRoute(
-            name: "GetUser",
+            name: "Get",
             pattern: "{controller=User}/{id}");
 
         builder.MapControllerRoute(

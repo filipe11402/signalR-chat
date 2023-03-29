@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.IdentityModel.Tokens;
 using SignalRChat.Web.Controllers;
 using SignalRChat.Web.Helpers;
@@ -9,7 +8,10 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(options => 
+{
+    options.Filters.Add<JwtAuthorizationFilter>();
+});
 
 builder.Services.AddInfrastructureLayer();
 
@@ -44,6 +46,8 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+//app.Filter
 
 app.UseRouting();
 
