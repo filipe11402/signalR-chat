@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SignalRChat.Web.Infrastructure;
+using SignalRChat.Web.Domain;
 
 namespace SignalRChat.Web.Controllers;
 

@@ -1,6 +1,4 @@
-﻿using SignalRChat.Web.Domain;
-
-namespace SignalRChat.Web.Infrastructure;
+﻿namespace SignalRChat.Web.Domain;
 
 public interface IMessageRepository
 {
