@@ -8,16 +8,14 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews(options => 
-{
-    options.Filters.Add<JwtAuthorizationFilter>();
-});
+builder.Services.AddControllersWithViews();
 
 builder.Services.AddInfrastructureLayer();
 
 builder.Services.AddAuthentication(opt =>
 {
     opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(jwt =>
 {
     jwt.RequireHttpsMetadata = true;
@@ -30,9 +28,51 @@ builder.Services.AddAuthentication(opt =>
             Encoding.UTF8.GetBytes(JwtTokenHelpers.Key)
             ),
         ValidateAudience = false,
-        ValidateIssuer = false,
+        ValidateIssuer = false
+    };
+
+    jwt.Events = new JwtBearerEvents
+    {
+        OnTokenValidated = context =>
+        {
+            //TODO: get current user
+            return Task.CompletedTask;
+        },
+        OnAuthenticationFailed = context =>
+        {
+            context.Response.Redirect("User/login");
+
+            return Task.CompletedTask;
+        },
+        OnForbidden = context =>
+        {
+            context.Response.Redirect("User/login");
+
+            return Task.CompletedTask;
+        },
+        OnMessageReceived = context =>
+        {
+            context.Token = context.Request.Cookies["Authorization"];
+
+            return Task.CompletedTask;
+        },
+        OnChallenge = context =>
+        {
+            if (!context.Request.Cookies.ContainsKey("Authorization"))
+            {
+                context.Response.Redirect("user/login");
+                context.HandleResponse();
+                return Task.CompletedTask;
+            }
+
+            return Task.CompletedTask;
+        }
     };
 });
+
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 

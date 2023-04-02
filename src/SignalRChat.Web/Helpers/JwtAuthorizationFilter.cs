@@ -26,7 +26,6 @@ public class JwtAuthorizationFilter : Attribute, IAuthorizationFilter
             return;
         }
 
-
-        throw new NotImplementedException();
+        return;
     }
 }

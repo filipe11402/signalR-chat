@@ -11,18 +11,18 @@ public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
 
-    //TODO: use filter if not valid, go to Login page otherwise let it pass
     public HomeController(ILogger<HomeController> logger)
     {
         _logger = logger;
     }
 
-    [JwtAuthorizationFilter]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public IActionResult Index()
     {
         return View();
     }
 
+    [AllowAnonymous]
     public IActionResult Privacy()
     {
         return View();

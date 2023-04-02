@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SignalRChat.Web.Domain;
 using SignalRChat.Web.Helpers;
@@ -21,7 +22,7 @@ public class UserController : Controller
         return View();
     }
 
-    [Authorize]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [HttpGet]
     public IActionResult Get(string Id)
     {
@@ -29,6 +30,7 @@ public class UserController : Controller
     }
 
     [HttpGet]
+    [AllowAnonymous]
     public IActionResult Login() 
     {
         return View();
@@ -55,12 +57,18 @@ public class UserController : Controller
                     authenticateUserResult.username!));
 
             //TODO: return to user list
-            return View(request);
+            return RedirectToAction("List");
         }
 
         ModelState.AddModelError("", "Invalid information, either password or email are invalid");
 
         return View(request);
+    }
+
+    [HttpGet("")]
+    public async Task<IActionResult> List() 
+    {
+        
     }
 
     private void SetJWTCookie(string token)
@@ -71,7 +79,7 @@ public class UserController : Controller
             Expires = DateTimeOffset.UtcNow.AddHours(2)
         };
 
-        Response.Cookies.Append("JWT", token, cookieOptions);
+        Response.Cookies.Append("Authorization", token, cookieOptions);
     }
 }
 
