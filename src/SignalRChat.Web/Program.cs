@@ -40,13 +40,13 @@ builder.Services.AddAuthentication(opt =>
         },
         OnAuthenticationFailed = context =>
         {
-            context.Response.Redirect("User/login");
+            //context.Response.Redirect("User/login");
 
             return Task.CompletedTask;
         },
         OnForbidden = context =>
         {
-            context.Response.Redirect("User/login");
+            //context.Response.Redirect("User/login");
 
             return Task.CompletedTask;
         },

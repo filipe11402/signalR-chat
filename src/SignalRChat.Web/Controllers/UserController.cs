@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using SignalRChat.Web.Domain;
 using SignalRChat.Web.Helpers;
 using SignalRChat.Web.Requests;
+using SignalRChat.Web.Responses;
 
 namespace SignalRChat.Web.Controllers;
 
@@ -15,11 +16,6 @@ public class UserController : Controller
         IUserRepository userRepository)
     {
         _userRepository = userRepository;
-    }
-
-    public IActionResult Index()
-    {
-        return View();
     }
 
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
@@ -56,8 +52,7 @@ public class UserController : Controller
                     authenticateUserResult.userId,
                     authenticateUserResult.username!));
 
-            //TODO: return to user list
-            return RedirectToAction("List");
+            return RedirectToAction("ListUsers");
         }
 
         ModelState.AddModelError("", "Invalid information, either password or email are invalid");
@@ -65,10 +60,17 @@ public class UserController : Controller
         return View(request);
     }
 
-    [HttpGet("")]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [HttpGet]
     public async Task<IActionResult> List() 
     {
-        
+        var userList = await _userRepository
+            .ListAsync();
+
+        var response = userList
+            .Select(user => new UserListResponse(user.Id, user.Username));
+
+        return View(response);
     }
 
     private void SetJWTCookie(string token)
@@ -94,5 +96,9 @@ public static class UserControllerExtensions
         builder.MapControllerRoute(
             name: "Loginuser",
             pattern: "{controller=User}/login");
+
+        builder.MapControllerRoute(
+            name: "List",
+            pattern: "{controller=User}");
     }
 }

@@ -32,4 +32,9 @@ public sealed class UserRepository : IUserRepository
         return Task.FromResult(_users
             .FirstOrDefault(user => user.Id == id));
     }
+
+    public Task<IEnumerable<User>> ListAsync()
+    {
+        return Task.FromResult(_users);
+    }
 }
