@@ -4,15 +4,11 @@ public sealed class Message
 {
     public Guid Id { get; set; }
 
-    public Guid SenderId { get; set; }
-
-    public Guid ReceiverId { get; set; }
+    public string From { get; set; }
 
     public string Content { get; set; }
 
     public DateTime SentAt { get; set; }
-
-    public DateTime? ReadAt { get; set; }
 
     private Message()
     {
@@ -20,17 +16,12 @@ public sealed class Message
 
     public Message(
         Guid id,
-        Guid senderId,
-        Guid receiverId,
-        string content,
-        DateTime sentAt,
-        DateTime? readAt)
+        string from,
+        string content)
     {
         Id = id;
-        SenderId = senderId;
-        ReceiverId = receiverId;
+        From = from;
         Content = content;
-        SentAt = sentAt;
-        ReadAt = readAt;
+        SentAt = DateTime.UtcNow;
     }
 }

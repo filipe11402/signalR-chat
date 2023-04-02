@@ -16,7 +16,7 @@ public class HomeController : Controller
         _logger = logger;
     }
 
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public IActionResult Index()
     {
         return View();

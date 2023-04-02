@@ -18,7 +18,7 @@ public class UserController : Controller
         _userRepository = userRepository;
     }
 
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [HttpGet]
     public IActionResult Get(string Id)
     {
@@ -33,6 +33,7 @@ public class UserController : Controller
     }
 
     [HttpPost]
+    [AllowAnonymous]
     public async Task<IActionResult> Login(LoginUserRequest request) 
     {
         (Guid userId, string username) authenticateUserResult = (default, default);
@@ -52,7 +53,7 @@ public class UserController : Controller
                     authenticateUserResult.userId,
                     authenticateUserResult.username!));
 
-            return RedirectToAction("ListUsers");
+            return RedirectToAction("List");
         }
 
         ModelState.AddModelError("", "Invalid information, either password or email are invalid");

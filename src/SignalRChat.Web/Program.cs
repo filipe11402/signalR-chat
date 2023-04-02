@@ -12,63 +12,58 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddInfrastructureLayer();
 
-builder.Services.AddAuthentication(opt =>
-{
-    opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(jwt =>
-{
-    jwt.RequireHttpsMetadata = true;
-    jwt.SaveToken = true;
+//builder.Services.AddAuthentication(opt =>
+//{
+//    opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+//    opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+//}).AddJwtBearer(jwt =>
+//{
+//    jwt.RequireHttpsMetadata = true;
+//    jwt.SaveToken = true;
 
-    jwt.TokenValidationParameters = new TokenValidationParameters()
-    {
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(JwtTokenHelpers.Key)
-            ),
-        ValidateAudience = false,
-        ValidateIssuer = false
-    };
+//    jwt.TokenValidationParameters = new TokenValidationParameters()
+//    {
+//        ValidateIssuerSigningKey = true,
+//        IssuerSigningKey = new SymmetricSecurityKey(
+//            Encoding.UTF8.GetBytes(JwtTokenHelpers.Key)
+//            ),
+//        ValidateAudience = false,
+//        ValidateIssuer = false
+//    };
 
-    jwt.Events = new JwtBearerEvents
-    {
-        OnTokenValidated = context =>
-        {
-            //TODO: get current user
-            return Task.CompletedTask;
-        },
-        OnAuthenticationFailed = context =>
-        {
-            //context.Response.Redirect("User/login");
+//    jwt.Events = new JwtBearerEvents
+//    {
+//        OnTokenValidated = context =>
+//        {
+//            //TODO: get current user
+//            return Task.CompletedTask;
+//        },
+//        OnForbidden = context =>
+//        {
+//            context.Response.Redirect("User/login");
+//            context.Fail("failed");
 
-            return Task.CompletedTask;
-        },
-        OnForbidden = context =>
-        {
-            //context.Response.Redirect("User/login");
+//            return Task.CompletedTask;
+//        },
+//        OnMessageReceived = context =>
+//        {
+//            context.Token = context.Request.Cookies["Authorization"];
 
-            return Task.CompletedTask;
-        },
-        OnMessageReceived = context =>
-        {
-            context.Token = context.Request.Cookies["Authorization"];
+//            return Task.CompletedTask;
+//        },
+//        OnChallenge = context =>
+//        {
+//            if (!context.Request.Cookies.ContainsKey("Authorization"))
+//            {
+//                context.Response.Redirect("user/login");
+//                context.HandleResponse();
+//                return Task.CompletedTask;
+//            }
 
-            return Task.CompletedTask;
-        },
-        OnChallenge = context =>
-        {
-            if (!context.Request.Cookies.ContainsKey("Authorization"))
-            {
-                context.Response.Redirect("user/login");
-                context.HandleResponse();
-                return Task.CompletedTask;
-            }
-
-            return Task.CompletedTask;
-        }
-    };
-});
+//            return Task.CompletedTask;
+//        }
+//    };
+//});
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -96,8 +91,9 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Chat}/{action=Index}");
 
 app.MapUserControllerRoutes();
+app.MapHub<ChatHub>("/chathub");
 
 app.Run();

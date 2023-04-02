@@ -1,21 +1,23 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
 using SignalRChat.Web.Infrastructure;
 
 namespace SignalRChat.Web.Controllers;
 
 public class ChatController : Controller
 {
-    private readonly IHubContext<ChatHub> _chatContext;
+    private readonly IMessageRepository _messageRepository;
 
     public ChatController(
-        IHubContext<ChatHub> chatContext)
+        IMessageRepository messageRepository)
     {
-        _chatContext = chatContext;
+        _messageRepository = messageRepository;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        return View();
+        var oldMessages = await _messageRepository
+            .GetAllAsync();
+
+        return View(oldMessages);
     }
 }
