@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+  location-backend:
+    container_name: "signalr-chat"
+    build:
+      dockerfile: src/SignalRChat.Web/Dockerfile
+      context: .
+    ports:
+      - 5000:80
+    networks:
+      - chat
+  
+networks:
+  chat:
+    driver: bridge
